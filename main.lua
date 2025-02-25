@@ -278,20 +278,26 @@ SMODS.Consumable{
         loc_txt = {
             name = "Wilted Sapling",
             text = {
-                "{C:inactive}Someone wants this very badly...{}"
+				" ",
+                "Someone wants this very badly...",
+				"#1#"
             }
         },
 		atlas = "bfsapling",
 		unlocked = true,
 		discovered = true,
         loc_vars = function(self, info_queue, card)
-            return {vars = {}}
+            return {vars = {card.fusiondetails or ""}}
         end,
         can_use = function(self, card, area, copier)
+			card.fusiondetails = ""
 			local joker = G.jokers.highlighted[1]
 			if joker then
-				if joker.config.center_key == "j_bf_hoaxe" or joker.config.center_key == "j_bf_elizant1" then
-					return true
+				if (joker.config.center_key == "j_bf_hoaxe" or joker.config.center_key == "j_bf_elizant1") then
+					card.fusiondetails = "(This action costs $1,000)"
+					if G.GAME.dollars > to_big(1000) then
+						return true
+					end
 				end
 			end
 			return false
@@ -309,6 +315,7 @@ SMODS.Consumable{
 				etq:add_to_deck()
 				G.jokers:emplace(etq)
 			end
+			ease_dollars(-1000)
         end,
 }
 
@@ -734,8 +741,8 @@ SMODS.Joker{
 	no_doe = true,
 	config = { 
 		extra = {
-			heartqueenmult = 100,
-			otherqueenmult = 10,
+			heartqueenmult = 25,
+			otherqueenmult = 8,
 			othermult = 2,
 		}
 	},
