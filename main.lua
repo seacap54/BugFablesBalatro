@@ -15,7 +15,9 @@ local atlases = {
 	'bianca',
 	'vanessa',
 	'janet',
-	'layra'
+	'layra',
+	'hector',
+	'kali'
 }
 
 for k, v in pairs(atlases) do
@@ -73,15 +75,6 @@ SMODS.Rarity {
 
 SMODS.Joker{
 	key = "vi",
-	loc_txt = {
-		name = "Vi",
-		text = {
-			"{C:attention}6{}s give {X:dark_edition,C:white} ^#1# {} Mult when scored",
-            "Increase value by {X:dark_edition,C:white}^#2#{} when a {C:attention}6{} scores",
-			" ",
-			"{C:inactive}I'm worth like, four bees okay?!{}",
-		}
-	},
 	atlas = "bfvi",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -120,15 +113,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "kabbu",
-	loc_txt = {
-		name = "Kabbu",
-		text = {
-			"{X:dark_edition,C:white}^#1#{} Mult against {C:attention}Boss Blinds{}",
-            "Earn {C:money}$#2#{} when played hand triggers a {C:attention}Boss Blind{}",
-			" ",
-			"{C:inactive}You shouldn't underestimate me.{}",
-		}
-	},
 	atlas = "bfkabbu",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -147,7 +131,7 @@ SMODS.Joker{
 		}
 	},
 	calculate = function(self,card,context)
-		if context.debuffed_hand and context.cardarea == G.play then
+		if context.debuffed_hand then
             return {
 				dollars = card.ability.extra.money,
             }
@@ -167,17 +151,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "leif",
-	loc_txt = {
-		name = "Leif",
-		text = {
-			"{C:attention}Glass cards{} give an additional",
-            "{X:dark_edition,C:white}^#1#{} Mult when scored",
-			"This number increases by {X:dark_edition,C:white}^#2#{}",
-			"when a {C:attention}Glass card{} breaks",
-			" ",
-			"{C:inactive}Sup.{}",
-		}
-	},
 	atlas = "bfleif",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -221,17 +194,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "hoaxe",
-	loc_txt = {
-		name = "Hoaxe",
-		text = {
-			"When a {C:attention}King{} is scored,",
-            "multiply {C:attention}Blind size{} by {C:attention}x#1#{}",
-			" ",
-			"{C:inactive}For when I consume the sapling...{}",
-			"{C:inactive}You will have no choice but to squirm in fear{}",
-			"{C:inactive}and surrender to your King!{}",
-		}
-	},
 	atlas = "bfhoaxe",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -275,14 +237,6 @@ SMODS.Consumable{
         set = 'Tarot',
         pos = {x = 0, y = 0},
         cost = 4,
-        loc_txt = {
-            name = "Wilted Sapling",
-            text = {
-				" ",
-                "Someone wants this very badly...",
-				"#1#"
-            }
-        },
 		atlas = "bfsapling",
 		unlocked = true,
 		discovered = true,
@@ -321,17 +275,6 @@ SMODS.Consumable{
 
 SMODS.Joker{
 	key = "elk",
-	loc_txt = {
-		name = "The Everlasting King",
-		text = {
-			"When a {C:attention}King{} is scored,",
-            "multiply {C:attention}Blind size{} by {C:attention}x#1#{}",
-			"When hand is played, gain {C:attention}x#2#{} {C:red}Discards{}",
-			" ",
-			"{C:inactive}...Yes...YES!{}",
-			"{C:inactive}This power will suit me just fine!{}",
-		}
-	},
 	atlas = "bfelk",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -380,15 +323,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "carmina",
-	loc_txt = {
-		name = "Carmina",
-		text = {
-			"Spin a {C:attention}roulette{} when hand is played",
-			" ",
-			"{C:inactive}I brought you into the scene...{}",
-			"{C:inactive}But I\'ll crush you nonetheless!{}",
-		}
-	},
 	atlas = "bfcarmina",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -468,17 +402,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "asto",
-	loc_txt = {
-		name = "Astotheles",
-		text = {
-			"When selecting a {C:attention}Blind{},",
-            "destroy a random {C:attention}Consumable{}",
-			"and {C:planet}level up{} {C:attention}all hands #1# times{}",
-			" ",
-			"{C:inactive}You shall have an honorable fight.{}",
-			"{C:inactive}Do your worst!{}",
-		}
-	},
 	atlas = "bfasto",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -534,21 +457,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "venus",
-	loc_txt = {
-		name = "Venus",
-		text = {
-			"{C:attention}+#1# Consumable slots{}",
-			"{C:attention}Mult cards{} have a {C:green}chance{} to, when scored:",
-            "{C:green}#2# in #4#{}: give {C:money}$#3#{}",
-			"{C:green}#2# in #5#{}: give a {C:tarot}Tarot card{}",
-			"{C:green}#2# in #6#{}: give a {C:spectral}Spectral card{}",
-			"{C:green}#2# in #7#{}: give a {C:spectral}Soul{}",
-			"{C:green}#2# in #8#{}: give a {C:cry_exotic}Gateway{}",
-			'{C:inactive}(Does not require room, but may overflow)',
-			" ",
-			"{C:inactive}My roots travel all across the soil.{}",
-		}
-	},
 	atlas = "bfvenus",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -639,14 +547,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "elizant2",
-	loc_txt = {
-		name = "Queen Elizant II",
-		text = {
-			"{C:attention}Each card held in hand{} gives {X:mult,C:white}X#1#{} Mult",
-			" ",
-			"{C:inactive}Time is precious. Let us not waste it.{}",
-		}
-	},
 	atlas = "bfelizant2",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -687,14 +587,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "elizant1",
-	loc_txt = {
-		name = "Queen Elizant I",
-		text = {
-			" ",
-			"{C:inactive}(She's taking a hard-earned rest.){}",
-			" "
-		}
-	},
 	atlas = "bfelizant1",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -717,16 +609,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "etq",
-	loc_txt = {
-		name = "The Eternal Queen",
-		text = {
-			"{C:attention}Queens{} of {C:hearts}Hearts{} give {X:dark_edition,C:white}^#1#{} Mult when scored",
-			"{C:attention}Other Queens{} give {X:dark_edition,C:white}^#2#{} Mult when scored",
-			"{C:attention}All other cards{} give {X:dark_edition,C:white}^#3#{} Mult when scored",
-			" ",
-			"{C:inactive}(She has nothing to say.){}"
-		}
-	},
 	atlas = "bfetq",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -775,16 +657,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "scarlet",
-	loc_txt = {
-		name = "Monsieur Scarlet",
-		text = {
-			"When hand is played,",
-			"fixed {C:green}25% chance{} to",
-			"gain {C:attention}#1# hands{}",
-			" ",
-			"{C:inactive}Just...{} {C:inactive,E:1}relax{}{C:inactive}...~{}",
-		}
-	},
 	atlas = "bfscarlet",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -819,15 +691,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "bianca",
-	loc_txt = {
-		name = "Queen Bianca",
-		text = {
-			"If played hand contains a {C:attention}Straight{},",
-			"retrigger all Jokers {C:attention}once per card scored{}",
-			" ",
-			"{C:inactive}We all have our wonderful place in this world.{}",
-		}
-	},
 	atlas = "bfbianca",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -884,19 +747,17 @@ function ease_dollars(mod, instant)
 	if #SMODS.find_card('j_bf_vanessa') > 0 and to_big(mod) > to_big(0) then
 		mod = mod * (3 ^ #SMODS.find_card('j_bf_vanessa'))
 	end
+	if G.GAME.blind.boss and #SMODS.find_card("j_bf_kali") > 0 and to_big(mod) > to_big(1) then
+		for k, v in pairs(SMODS.find_card("j_bf_kali")) do
+			v.ability.extra.activated = true
+			v.ability.extra.mult = mod
+		end
+	end
 	return edref(mod, instant)
 end
 
 SMODS.Joker{
 	key = "vanessa",
-	loc_txt = {
-		name = "Queen Vanessa II",
-		text = {
-			"All {C:money}money{} earned is {C:attention}tripled{}",
-			" ",
-			"{C:inactive}Please, allow me to accompany you.{}",
-		}
-	},
 	atlas = "bfvanessa",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -919,15 +780,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "janet",
-	loc_txt = {
-		name = "Janet",
-		text = {
-			"All {C:attention}non-enhanced cards{} give",
-			"{C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult when scored",
-			" ",
-			"{C:inactive}I'll do my best, so you do too.{}",
-		}
-	},
 	atlas = "bfjanet",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -962,16 +814,6 @@ SMODS.Joker{
 
 SMODS.Joker{
 	key = "layra",
-	loc_txt = {
-		name = "Queen Layra II",
-		text = {
-			"Gives {C:attention}+1 Joker slot{} per",
-			"card that is added to the deck",
-			"{C:inactive}#2#{}",
-			" ",
-			"{C:inactive}I hope you can provide a good show!{}",
-		}
-	},
 	atlas = "bflayra",
 	pos = { x = 0, y = 0 },
 	soul_pos = { x = 1, y = 0 },
@@ -989,7 +831,7 @@ SMODS.Joker{
 		}
 	},
 	calculate = function(self,card,context)
-		if context.playing_card_added and not context.blueprint then
+		if context.playing_card_added and not context.blueprint and jl.njr(context) then
 			card.ability.extra.slots = card.ability.extra.slots + #context.cards
 			G.jokers.config.card_limit = G.jokers.config.card_limit + #context.cards
 			if #context.cards == 1 then
@@ -1007,5 +849,75 @@ SMODS.Joker{
 	end,
 	loc_vars = function(self,info_queue,center)
 		return {vars = {center.ability.extra.slots,center.ability.extra.slots == 1 and "(Currently +"..center.ability.extra.slots.." Joker slot)" or "(Currently +"..center.ability.extra.slots.." Joker slots)"}}
+	end,
+}
+
+SMODS.Joker{
+	key = "hector",
+	atlas = "bfhector",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 20,
+	rarity = 4,
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	config = { 
+		extra = {
+			percardmult = 1.5,
+		}
+	},
+	loc_vars = function(self,info_queue,center)
+		return {vars = {G.GAME.starting_deck_size and G.GAME.starting_deck_size or 52, center.ability.extra.percardmult, center.ability.extra.percardmult ^ math.max((G.GAME.starting_deck_size - (G.playing_cards and #G.playing_cards or G.GAME.starting_deck_size)), 0)}}
+	end,
+	calculate = function(self,card,context)
+		if context.joker_main then
+			return {
+				xmult = card.ability.extra.percardmult ^ (math.max(G.GAME.starting_deck_size - #G.playing_cards, 0)),
+				card = card
+			}
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "kali",
+	atlas = "bfkali",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 8,
+	rarity = 3,
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	immutable = false,
+	config = { 
+		extra = {
+			activated = false,
+			mult = 1,
+		}
+	},
+	loc_vars = function(self,info_queue,center)
+		return {vars = {center.ability.extra.activated and "active" or "inactive", center.ability.extra.mult or 1}}
+	end,
+	calculate = function(self,card,context)
+		if context.joker_main and card.ability.extra.activated then
+			return {
+				xmult = card.ability.extra.mult,
+				card = card
+			}
+		end
+		if context.end_of_round and context.cardarea == G.jokers and not context.retrigger_joker and not context.blueprint then
+			card.ability.extra.activated = false
+			card.ability.extra.mult = 1
+			return {
+				message = localize("k_reset"),
+				card = card,
+			}
+		end
 	end,
 }
