@@ -17,7 +17,15 @@ local atlases = {
 	'janet',
 	'layra',
 	'hector',
-	'kali'
+	'kali',
+	'mothiva',
+	'zasp',
+	'charmy',
+	'stratos',
+	'delilah',
+	'maki',
+	'kina',
+	'yin'
 }
 
 for k, v in pairs(atlases) do
@@ -36,6 +44,7 @@ SMODS.Atlas {
 	path = 'c_bf_sapling.png'
 }
 
+--this and lvlupallhands stolen from Jen's Almanac
 function Card:speak(text, col)
 	if type(text) == 'table' then text = text[math.random(#text)] end
 	card_eval_status_text(self, 'extra', nil, nil, nil, {message = text, colour = col or G.C.FILTER})
@@ -96,7 +105,9 @@ SMODS.Joker{
 		if context.individual then
 			if context.cardarea == G.play then
 				if context.other_card:get_id() == 6 then
-					card.ability.extra.Emult = card.ability.extra.Emult + card.ability.extra.Emult_change
+					if not context.blueprint and jl.njr(context) then
+						card.ability.extra.Emult = card.ability.extra.Emult + card.ability.extra.Emult_change
+					end
 					return {
 						e_mult = card.ability.extra.Emult,
 						colour = G.C.DARK_EDITION,
@@ -179,7 +190,7 @@ SMODS.Joker{
 				end
 			end
 		end
-		if context.remove_playing_cards and not context.blueprint then
+		if context.remove_playing_cards and not context.blueprint and jl.njr(context) then
 			for k, v in ipairs(context.removed) do
 				if v.shattered then
 					card.ability.extra.Emult = card.ability.extra.Emult + card.ability.extra.Emult_change
@@ -262,11 +273,13 @@ SMODS.Consumable{
 				local elk = create_card('Joker',G.jokers, nil, nil, nil, nil, 'j_bf_elk')
 				joker:start_dissolve()
 				elk:add_to_deck()
+				elk:start_materialize()
 				G.jokers:emplace(elk)
 			elseif joker.config.center_key == "j_bf_elizant1" then
 				local etq = create_card('Joker',G.jokers, nil, nil, nil, nil, 'j_bf_etq')
 				joker:start_dissolve()
 				etq:add_to_deck()
+				etq:start_materialize()
 				G.jokers:emplace(etq)
 			end
 			ease_dollars(-1000)
@@ -712,7 +725,7 @@ SMODS.Joker{
 		if not card.ability.extra.cardcount then
 			card.ability.extra.cardcount = 0
 		end
-		if context.before and not context.blueprint and not context.retrigger_joker_check and not context.retrigger_joker then
+		if context.before and not context.blueprint and jl.njr(context) then
 			if next(context.poker_hands['Straight']) then
 				card.ability.extra.isstraight = true
 				for i, v in pairs (context.scoring_hand) do
@@ -732,7 +745,7 @@ SMODS.Joker{
 				}
 			end
 		end
-		if context.after and not context.blueprint and not context.retrigger_joker_check and not context.retrigger_joker then
+		if context.after and not context.blueprint and jl.njr(context) then
 			card.ability.extra.cardcount = 0
 		end
 	end,
@@ -911,13 +924,378 @@ SMODS.Joker{
 				card = card
 			}
 		end
-		if context.end_of_round and context.cardarea == G.jokers and not context.retrigger_joker and not context.blueprint then
+		if context.end_of_round and context.cardarea == G.jokers and not context.blueprint and jl.njr(context) then
 			card.ability.extra.activated = false
 			card.ability.extra.mult = 1
 			return {
 				message = localize("k_reset"),
 				card = card,
 			}
+		end
+	end,
+}
+
+function pseudoStrength(card)
+	--Stolen from SMODS version of Strength
+    local _card = card
+    local rank_data = SMODS.Ranks[_card.base.value]
+    local behavior = rank_data.strength_effect or { fixed = 1, ignore = false, random = false }
+    local new_rank
+    if behavior.ignore or not next(rank_data.next) then
+        return true
+	elseif behavior.random then
+		-- TODO doesn't respect in_pool
+		new_rank = pseudorandom_element(rank_data.next, pseudoseed('mothiva'))
+	else
+		local ii = (behavior.fixed and rank_data.next[behavior.fixed]) and behavior.fixed or 1
+		new_rank = rank_data.next[ii]
+	end
+	if not SMODS.has_no_rank(card) and SMODS.Ranks[new_rank].nominal >= rank_data.nominal then
+		assert(SMODS.change_base(_card, nil, new_rank))
+	end
+	return true
+end
+
+SMODS.Joker{
+	key = "mothiva",
+	atlas = "bfmothiva",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 20,
+	rarity = 4,
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = false,
+	immutable = true,
+	calculate = function(self,card,context)
+		if context.before and not context.blueprint and jl.njr(context) then
+			if #context.scoring_hand >= 4 then
+				for k, v in pairs(context.scoring_hand) do
+					pseudoStrength(v)
+				end
+			end
+		end
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		if #SMODS.find_card("j_bf_zasp") > 0 then
+			for k, v in pairs(SMODS.find_card("j_bf_zasp")) do
+				if from_debuff then
+					v.ability.extra.mult = v.ability.extra.mult * 2
+				else
+					v.ability.extra.mult = v.ability.extra.mult * 4
+				end
+			end
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "zasp",
+	atlas = "bfzasp",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 20,
+	rarity = 4,
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	config = { 
+		extra = {
+			mult = 11,
+		}
+	},
+	loc_vars = function(self,info_queue,center)
+		info_queue[#info_queue + 1] = G.P_CENTERS.j_bf_mothiva
+		return {vars = {center.ability.extra.mult}}
+	end,
+	calculate = function(self,card,context)
+		if context.individual and context.cardarea == G.play then
+			if context.other_card:get_id() == 14 then
+				return {
+					xmult = card.ability.extra.mult,
+					card = card
+				}, true
+			end
+		end
+	end,
+}
+
+local charmyconsums = {
+	"Planet",
+	"Tarot",
+	"Spectral"
+}
+
+SMODS.Joker{
+	key = "charmy",
+	atlas = "bfcharmy",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 8,
+	rarity = 3,
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	immutable = true,
+	config = { 
+		extra = {
+		}
+	},
+	loc_vars = function(self,info_queue,center)
+		return {vars = { }}
+	end,
+	calculate = function(self,card,context)
+		if context.joker_main then
+			if jl.chance("charmychance", 2, true) then
+				card:speak("Now you're all charmed up.", G.C.BLUE)
+				local roll = charmyconsums[pseudorandom("charmy", 1, #charmyconsums)]
+				if roll == "Planet" then
+					G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2, func = function()
+						local card2 = create_card('Planet', G.consumeables, nil, nil, nil, nil, nil, 'charmyplanet')
+						card2:add_to_deck()
+						G.consumeables:emplace(card2)
+						card:juice_up(0.3, 0.5)
+						return true
+					end }))
+				elseif roll == "Tarot" then
+					G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2, func = function()
+						local card2 = create_card('Tarot', G.consumeables, nil, nil, nil, nil, nil, 'charmytarot')
+						card2:add_to_deck()
+						G.consumeables:emplace(card2)
+						card:juice_up(0.3, 0.5)
+						return true
+					end }))
+				elseif roll == "Spectral" then
+					G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.2, func = function()
+						local card2 = create_card('Spectral', G.consumeables, nil, nil, nil, nil, nil, 'charmyspectral')
+						card2:add_to_deck()
+						G.consumeables:emplace(card2)
+						card:juice_up(0.3, 0.5)
+						return true
+					end }))
+				end
+			end
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "stratos",
+	atlas = "bfstratos",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 50,
+	rarity = 'cry_exotic',
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	config = { 
+		extra = {
+			emult = 0.1,
+		}
+	},
+	loc_vars = function(self,info_queue,center)
+		return {vars = {1 + center.ability.extra.emult}}
+	end,
+	calculate = function(self,card,context)
+		if context.joker_main then
+			return {
+				e_mult = 1 + card.ability.extra.emult,
+				card = card
+			}
+		end
+		if context.end_of_round and context.cardarea == G.jokers and G.GAME.blind.boss and not context.blueprint and jl.njr(context) then
+			card.ability.extra.emult = card.ability.extra.emult * 2
+			return {
+				message = localize("k_upgrade_ex"),
+				colour = G.C.DARK_EDITION,
+				card = card
+			}
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "delilah",
+	atlas = "bfdelilah",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 50,
+	rarity = 'cry_exotic',
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	config = { 
+		extra = {
+		}
+	},
+	loc_vars = function(self,info_queue,center)
+		return {vars = {G.GAME and G.GAME.current_round.discards_left + G.GAME.current_round.hands_left or 2}}
+	end,
+	calculate = function(self,card,context)
+		if context.setting_blind then
+			if not G.GAME.blind.boss then
+				if jl.chance("delilahhit", 3, true) then
+					card:speak("That was fun!", G.C.CHIPS)
+					G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.1,func = function()
+						G.GAME.blind.chips = math.floor(G.GAME.blind.chips ^ (1 / (G.GAME.current_round.discards_left + G.GAME.current_round.hands_left)))
+						G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+
+						local chips_UI = G.hand_text_area.blind_chips
+						G.FUNCS.blind_chip_UI_scale(G.hand_text_area.blind_chips)
+						G.HUD_blind:recalculate() 
+						chips_UI:juice_up()
+
+						if not silent then play_sound('chips2') end
+					return true end }))
+				end
+			end
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "maki",
+	atlas = "bfmaki",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 50,
+	rarity = 'cry_exotic',
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	config = { 
+		extra = {
+			Emult = 1.5,
+		}
+	},
+	calculate = function(self,card,context)
+		if context.individual and not context.end_of_round then
+			if context.cardarea == G.hand then
+				if context.other_card and context.other_card.ability.effect == 'Steel Card' then 
+					if context.other_card.debuff then
+						return {
+							message = localize('k_debuffed'),
+							colour = G.C.RED,
+							card = card,
+						}
+					else
+						return {
+							e_mult = card.ability.extra.Emult,
+							card = card
+						}
+					end
+                end
+			end
+		end
+	end,
+	loc_vars = function(self,info_queue,center)
+		return {vars = {center.ability.extra.Emult}}
+	end,
+}
+
+SMODS.Joker{
+	key = "kina",
+	atlas = "bfkina",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 50,
+	rarity = 'cry_exotic',
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = false,
+	config = { 
+		extra = {
+			Emult = 1.25,
+		}
+	},
+	loc_vars = function(self,info_queue,center)
+		info_queue[#info_queue + 1] = G.P_CENTERS.j_bf_maki
+		return {vars = {center.ability.extra.Emult, #SMODS.find_card("j_bf_maki") > 0 and "You always run off without me!" or "Oh no... Maki went off by himself? Again!?"}}
+	end,
+	calculate = function(self,card,context)
+		if context.individual and context.cardarea == G.play then
+			if context.other_card:get_id() == 11 then
+				return {
+					e_mult = card.ability.extra.Emult,
+					colour = G.C.DARK_EDITION,
+					card = card
+				}, true
+			end
+		end
+		if context.repetition and context.cardarea == G.play then
+			if context.other_card:get_id() == 11 then
+				if #SMODS.find_card("j_bf_maki") > 0 then
+					return {
+						message = localize("k_again_ex"),
+						repetitions = #SMODS.find_card("j_bf_maki"),
+						card = card,
+					}
+				end
+			end
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "yin",
+	atlas = "bfyin",
+	pos = { x = 0, y = 0 },
+	soul_pos = { x = 1, y = 0 },
+	cost = 50,
+	rarity = 'cry_exotic',
+	unlocked = true,
+	discovered = true,
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = false,
+	config = { 
+		extra = {
+		}
+	},
+	loc_vars = function(self,info_queue,center)
+		info_queue[#info_queue + 1] = { key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
+		return {vars = {}}
+	end,
+	calculate = function(self,card,context)
+		if jl.njr(context) and not context.blueprint and context.using_consumeable and context.consumeable and not (context.consumeable.edition or {}).negative then
+			local quota = 1
+			if Incantation then
+				quota = context.consumeable:getEvalQty()
+			end
+			local card_key = context.consumeable:gc().key
+			local makes = 0
+			for i = 1, quota do
+				if jl.chance("yindupe", 4, true) then
+					makes = makes + 1
+				end
+			end
+			if makes > 0 then
+				card:speak("Ma...magic!", G.C.FILTER)
+				Q(function()
+					local yin = copy_card(context.consumeable)
+					if quota > 1 and Incantation then
+						yin:setQty(makes)
+					end
+					yin:set_edition({negative = true}, true)
+					yin:add_to_deck()
+					G.consumeables:emplace(yin)
+				return true end, 1)
+			end	
 		end
 	end,
 }

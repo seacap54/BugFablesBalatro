@@ -186,12 +186,92 @@ return {
 				name = "Kali",
 				text = {
 					"When {C:money}money is earned{} during",
-					"a {C:attention}Boss Blind, this Joker",
+					"a {C:attention}Boss Blind{}, this Joker",
 					"gives {X:mult,C:white}XMult{} equal to the {C:money}money earned",
 					"{C:inactive}(Requires $1 or more){}",
 					"{C:inactive}(Currently #1# with {X:mult,C:white}X#2#{} {C:inactive}Mult){}",
 					" ",
 					"{C:inactive}You cannot put a price on a masterpiece.{}"
+				},
+			},
+			j_bf_mothiva = {
+				name = "Mothiva",
+				text = {
+					"If played hand contains {C:attention}4 or more{}",
+					"scoring cards, upgrade the {C:attention}rank{} of each one",
+					"{C:inactive}(Aces do not become 2s){}",
+					" ",
+					"{C:inactive}It's a bug eat bug world, on the way to stardom!"
+				},
+			},
+			j_bf_zasp = {
+				name = "Zasp",
+				text = {
+					"{C:attention}Aces{} give {X:mult,C:white}X#1#{} Mult when scored",
+					"This value doubles if {C:attention}Mothiva{} is debuffed,",
+					"and quadruples if {C:attention}Mothiva{} is dissolved",
+					" ",
+					"{C:inactive}Don't misunderstand. I'm not doing this only for Mothiva.",
+					"{C:inactive}...Although it's a pretty big reason.{}"
+				},
+			},
+			j_bf_charmy = {
+				name = "Charmy",
+				text = {
+					"When a {C:attention}hand{} is played, fixed {C:green}50% chance{} to",
+					"generate a random {C:planet}Planet{}, {C:tarot}Tarot{}, or {C:spectral}Spectral{} card",
+					"{C:inactive}(Equal chance for each)",
+					" ",
+					"{C:inactive}Hello there lovelies! Welcome to my humble stall.",
+				},
+			},
+			j_bf_stratos = {
+				name = "Stratos",
+				text = {
+					"{X:dark_edition,C:white}^#1#{} Mult",
+					"This boost {C:attention}doubles{} when",
+					"a {C:attention}Boss Blind{} is defeated",
+					" ",
+					"{C:inactive,s:1.35}I'VE BEEN WAITING TO LET LOOSE!{}",
+				},
+			},
+			j_bf_delilah = {
+				name = "Delilah",
+				text = {
+					"When a {C:attention}non-Boss{} Blind is selected,",
+					"fixed {C:green}33%{} chance",
+					"to Sth-root the {C:attention}Blind requirement{}",
+					"{C:inactive}(S = sum of hands and discards, currently #1#)",
+					" ",
+					"{C:inactive}Take your time! A rushed fight's no good.{}",
+				},
+			},
+			j_bf_maki = {
+				name = "Maki",
+				text = {
+					"{C:attention}Steel cards{} give an additional",
+					"{X:dark_edition,C:white}^#1#{} Mult when held in hand",
+					" ",
+					"{C:inactive}I would never serve one without conviction and integrity.{}",
+				},
+			},
+			j_bf_kina = {
+				name = "Kina",
+				text = {
+					"{C:attention}Jacks{} give {X:dark_edition,C:white}^#1#{} Mult when scored",
+					"Retrigger scored {C:attention}Jacks{} once per copy of {C:attention}Maki{}",
+					" ",
+					"{C:inactive}#2#{}",
+				},
+			},
+			j_bf_yin = {
+				name = "Yin",
+				text = {
+					"When a {C:attention}non-{C:dark_edition}Negative{} {C:attention}consumable{} is used,",
+					"fixed {C:green}25%{} chance to create a {C:dark_edition}Negative{} copy",
+					"{C:inactive}(Unretriggerable){}",
+					" ",
+					"{C:inactive}N...Nice to me...meet you!{}",
 				},
 			},
         },
