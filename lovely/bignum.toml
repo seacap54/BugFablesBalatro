@@ -1,0 +1,25 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = -1
+
+# Add BFB to Bignum whitelist
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Cryptid "lib/misc.lua"]'
+pattern = '''Cryptid.mod_whitelist = {'''
+position = "after"
+payload = '''
+["Bug Fables"] = true,
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "if amt > 0 or amt < 0 then"
+position = "at"
+payload = '''
+if to_big(amt) ~= to_big(0) then
+'''
+match_indent = true
